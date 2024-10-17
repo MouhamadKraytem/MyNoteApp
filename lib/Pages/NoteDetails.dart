@@ -42,13 +42,16 @@ class _NoteDetailsState extends State<NoteDetails> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Note Details", style: Theme.of(context).textTheme.displayMedium,),
+        title: Text(
+          "Note Details",
+          style: Theme.of(context).textTheme.displayMedium,
+        ),
         centerTitle: true,
         leading: IconButton(
           onPressed: () {
-            if(isChanged){
+            if (isChanged) {
               _askToChange();
-            }else{
+            } else {
               Navigator.pop(context);
             }
           },
@@ -139,25 +142,39 @@ class _NoteDetailsState extends State<NoteDetails> {
 
   void _updateNote(Note existingNote) {
     try {
-      // Update the note's properties
-      existingNote.title = _titleController.text; // Update title
-      existingNote.decription =
-          _descriptionController.text; // Update description
+      if (_titleController.text != "" && _descriptionController.text != "") {
+        // Update the note's properties
+        existingNote.title = _titleController.text; // Update title
+        existingNote.decription =
+            _descriptionController.text; // Update description
 
-      // Call the update method from the NoteService provider
-      Provider.of<NoteServices>(context, listen: false).updateNote(
-        Provider.of<NoteServices>(context, listen: false)
-            .getNoteIndex(existingNote),
-        existingNote,
-      );
+        // Call the update method from the NoteService provider
+        Provider.of<NoteServices>(context, listen: false).updateNote(
+          Provider.of<NoteServices>(context, listen: false)
+              .getNoteIndex(existingNote),
+          existingNote,
+        );
+        isChanged = false;
+        // Show a success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Note updated successfully!')),
+        );
+        Navigator.pop(context);
+      } else {
+        if (_titleController.text.isEmpty) {
+          _titleController.text = existingNote.title;
+        }
 
-      // Show a success message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Note updated successfully!')),
-      );
-
+        if (_descriptionController.text.isEmpty) {
+          _descriptionController.text = existingNote.decription;
+        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('title or description should not be empty')),
+        );
+        isChanged = true;
+        Navigator.pop(context);
+      }
       // Pop the screen after saving
-      Navigator.pop(context);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: $e')),
@@ -184,13 +201,14 @@ class _NoteDetailsState extends State<NoteDetails> {
                 Text(
                   "Update Task?",
                   style: Theme.of(context).textTheme.headline6?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                   textAlign: TextAlign.center,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0), // Add padding
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  // Add padding
                   child: Text(
                     "Are you sure you want to update this task? This action cannot be undone.",
                     style: Theme.of(context).textTheme.bodySmall,
@@ -225,12 +243,12 @@ class _NoteDetailsState extends State<NoteDetails> {
                 Text(
                   "Discard Changes ?",
                   style: Theme.of(context).textTheme.headline6?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                   textAlign: TextAlign.center, // Center the text
                 ),
-                ConfirmButtons(),
+                DiscardButtons(),
               ],
             ),
           ),
@@ -238,16 +256,20 @@ class _NoteDetailsState extends State<NoteDetails> {
       },
     );
   }
-  Widget ConfirmButtons() {
+
+  Widget DiscardButtons() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         ElevatedButton(
           onPressed: () {
-            _updateNote(widget.note);
-            isChanged = false;
+            Navigator.pop(context);
+            Navigator.pop(context);
           },
-          child: Text("Yes", style: Theme.of(context).textTheme.displaySmall,),
+          child: Text(
+            "Yes",
+            style: Theme.of(context).textTheme.displaySmall,
+          ),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.green,
             padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -273,4 +295,40 @@ class _NoteDetailsState extends State<NoteDetails> {
     );
   }
 
+  Widget ConfirmButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        ElevatedButton(
+          onPressed: () {
+            _updateNote(widget.note);
+          },
+          child: Text(
+            "Yes",
+            style: Theme.of(context).textTheme.displaySmall,
+          ),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text("No", style: Theme.of(context).textTheme.displaySmall),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.red,
+            padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }
