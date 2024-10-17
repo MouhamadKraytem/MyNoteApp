@@ -39,6 +39,8 @@ class _HomePageState extends State<HomePage> {
     double _buttonSize = 20;
     Color buttonBackgroundColor = Color(0xFF3B3B3B);
 
+
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -99,6 +101,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Consumer<NoteServices>(
         builder: (context, noteServices, child){
+
           return  noteServices.notes.isEmpty ? _EmptyScreen() : _listScreen(noteServices.notes);
         },
       ),
@@ -130,23 +133,30 @@ class _HomePageState extends State<HomePage> {
     return ListView.builder(
       itemBuilder: (BuildContext _context, int index) {
         var note = _noteList[index];
-        return Container(
-          margin: EdgeInsets.all(5),
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Color(note.colorValue),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: GestureDetector(
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => NoteDetails(note: note)));
-            },
-            child: ListTile(
-              title: Text(note.title),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+        return Dismissible(
+          onDismissed: (direction){
+            _deleteNote(note);
+          },
+          key: UniqueKey(),
+          background: _buildBackground(),
+          child: Container(
+            margin: EdgeInsets.all(5),
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Color(note.colorValue),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => NoteDetails(note: note)));
+              },
+              child: ListTile(
+                title: Text(note.title),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                style: ListTileStyle.list,
               ),
-              style: ListTileStyle.list,
             ),
           ),
         );
@@ -155,6 +165,27 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _buildBackground() {
+    return Container(
+      color: Colors.red,
+      alignment: Alignment.centerLeft,
+      padding: EdgeInsets.symmetric(horizontal: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Icon(
+            Icons.delete,
+            color: Colors.white,
+          ),
+          SizedBox(width: 10),
+          Text(
+            "Delete",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    );
+  }
   void _showInfo() {
     showDialog(
       context: context,
@@ -184,4 +215,21 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
+
+  void _deleteNote(Note existingNote) {
+    try {
+      int noteIndex = Provider.of<NoteServices>(context, listen: false).getNoteIndex(existingNote);
+      Provider.of<NoteServices>(context, listen: false).deleteNote(noteIndex);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('${existingNote.title} deleted')),
+      );
+    } catch (e) {
+      // Show error in case of any issue
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    }
+  }
+
+
 }
