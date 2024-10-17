@@ -54,6 +54,8 @@ class _AddNoteState extends State<AddNote> {
     Color buttonBackgroundColor = Color(0xFF3B3B3B);
     return Scaffold(
         appBar: AppBar(
+          title: Text("New Note",style: Theme.of(context).textTheme.displayMedium,),
+          centerTitle: true,
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
@@ -103,6 +105,7 @@ class _AddNoteState extends State<AddNote> {
 
   Widget NewNoteForm() {
     return Container(
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
@@ -111,26 +114,46 @@ class _AddNoteState extends State<AddNote> {
           TextFormField(
             controller: _titleController,
             decoration: InputDecoration(
-              labelText: 'Title',
-              labelStyle: Theme.of(context).textTheme.bodyMedium,
-              border: InputBorder.none,
+              hintText: 'Enter the title of your note',
+              hintStyle: TextStyle(color: Colors.grey[400]),
+              filled: true,
+              fillColor: Colors.grey[200],
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
+              ),
+              contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
             ),
-            style: Theme.of(context).textTheme.bodyMedium,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Colors.black,
+            ),
             maxLines: null,
           ),
+
           SizedBox(height: 20),
+
           TextFormField(
             controller: _descriptionController,
             decoration: InputDecoration(
-              labelText: 'Description',
-              labelStyle: Theme.of(context).textTheme.bodyMedium,
-              border: InputBorder.none,
+              hintText: 'Enter the description of your note',
+              hintStyle: TextStyle(color: Colors.grey[400]),
+              filled: true,
+              fillColor: Colors.grey[200],
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none
+              ),
+              contentPadding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
             ),
-            style: Theme.of(context).textTheme.bodyMedium,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Colors.black,
+            ),
             maxLines: null,
           ),
+
         ],
       ),
     );
   }
+
 }

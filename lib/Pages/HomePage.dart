@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:myapp/Models/Note.dart';
+import 'package:myapp/Pages/NoteDetails.dart';
 import 'package:provider/provider.dart';
 
 import '../Services/NoteServices.dart';
@@ -138,7 +139,7 @@ class _HomePageState extends State<HomePage> {
           ),
           child: GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context, '/details');
+              Navigator.push(context, MaterialPageRoute(builder: (context) => NoteDetails(note: note)));
             },
             child: ListTile(
               title: Text(note.title),

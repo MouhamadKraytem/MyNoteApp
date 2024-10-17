@@ -36,14 +36,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/add',
+      initialRoute: '/',
       routes: {
         '/': (context) => HomePage(),
         '/add' : (context) => AddNote(),
         '/search' : (context) => SearchPage(),
-        '/details' : (context) => NoteDetails(),
-
-        // '/second': (context) => SecondScreen(),
       },
       theme: ThemeData(
         textTheme: TextTheme(

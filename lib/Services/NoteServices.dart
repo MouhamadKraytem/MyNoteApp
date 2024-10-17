@@ -22,6 +22,10 @@ class NoteServices extends ChangeNotifier{
     notifyListeners(); // Notify listeners about the change
   }
 
+  int getNoteIndex(Note note) {
+    return noteBox.values.toList().indexOf(note);
+  }
+
   void deleteNote(int index) {
     noteBox.deleteAt(index); // Delete note at specified index
     notifyListeners(); // Notify listeners about the change
