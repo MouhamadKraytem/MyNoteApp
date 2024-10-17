@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../Models/Note.dart';
+
 class NoteDetails extends StatefulWidget {
-  const NoteDetails({super.key});
+  Note note;
+  NoteDetails({super.key, required this.note});
 
   @override
   State<NoteDetails> createState() => _NoteDetailsState();

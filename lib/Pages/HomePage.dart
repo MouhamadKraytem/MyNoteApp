@@ -133,7 +133,7 @@ class _HomePageState extends State<HomePage> {
           margin: EdgeInsets.all(5),
           padding: EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: Colors.blueGrey,
+            color: Color(note.colorValue),
             borderRadius: BorderRadius.circular(10),
           ),
           child: GestureDetector(

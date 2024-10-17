@@ -3,6 +3,7 @@ import 'package:myapp/Services/NoteServices.dart';
 import 'package:provider/provider.dart';
 
 import '../Models/Note.dart';
+import 'dart:math';
 
 class AddNote extends StatefulWidget {
   const AddNote({super.key});
@@ -109,12 +110,24 @@ class _AddNoteState extends State<AddNote> {
         children: [
           TextFormField(
             controller: _titleController,
-            decoration: InputDecoration(labelText: 'Title'),
+            decoration: InputDecoration(
+              labelText: 'Title',
+              labelStyle: Theme.of(context).textTheme.bodyMedium,
+              border: InputBorder.none,
+            ),
+            style: Theme.of(context).textTheme.bodyMedium,
+            maxLines: null,
           ),
           SizedBox(height: 20),
           TextFormField(
             controller: _descriptionController,
-            decoration: InputDecoration(labelText: 'Description'),
+            decoration: InputDecoration(
+              labelText: 'Description',
+              labelStyle: Theme.of(context).textTheme.bodyMedium,
+              border: InputBorder.none,
+            ),
+            style: Theme.of(context).textTheme.bodyMedium,
+            maxLines: null,
           ),
         ],
       ),
